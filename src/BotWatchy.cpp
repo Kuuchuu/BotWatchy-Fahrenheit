@@ -335,6 +335,34 @@ weatherDataOneCall BotWatchy::getWeatherData()
         currentWeatherOneCall.invalid = true;
       }
       http.end();
+      HTTPClient http;
+      http.setConnectTimeout(3000); //3 second max timeout
+	  if (String(IPTIME) = "1")
+      {
+        String WorldTimeAPI = String("http://worldtimeapi.org/api/ip");
+      }
+      else
+      {
+        String WorldTimeAPI = String("http://worldtimeapi.org/api/timezone/") + String(TIMEZONE);
+      }
+      http.begin(WorldTimeAPI.c_str());
+      int httpResponseCode = http.GET();
+      if (httpResponseCode == 200)
+      {
+        String payload = http.getString();
+        JSONVar responseObject = JSON.parse(payload);
+		setTime(23, 31, 30, 13, 2, 2009);   //set the system time to 23h31m30s on 13Feb2009
+RTC.set(now());                     //set the RTC from the system time
+        SET_HOUR = int(responseObject["current"]["temp"]);
+        currentWeatherOneCall.weatherConditionCode0 = int(responseObject["current"]["weather"][0]["id"]);
+        currentWeatherOneCall.weatherConditionCode1 = int(responseObject["daily"][1]["weather"][0]["id"]);
+        currentWeatherOneCall.weatherConditionCode2 = int(responseObject["daily"][2]["weather"][0]["id"]);
+      }
+      else
+      {
+        currentWeatherOneCall.invalid = true;
+      }
+      http.end();
       //turn off radios
       WiFi.mode(WIFI_OFF);
       btStop();
