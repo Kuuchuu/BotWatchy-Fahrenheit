@@ -5,4 +5,6 @@
 #define LAT ""
 #define LON ""
 #define OWN_API_KEY ""
-#define TIMEZONE "" 
+#define TIMEZONE ""
+//Timezone is not used by default, Public IP is used to determine timezone automatically. Set IPTIME to 0 to use the manually set time zone
+#define IPTIME "1"
